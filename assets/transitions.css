@@ -1,0 +1,10 @@
+/* 頁面淡入淡出效果 */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: all 0.4s;
+}
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
