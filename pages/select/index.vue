@@ -40,9 +40,12 @@
           :key="index"
           class="grid grid-cols-2 p-4 border-b hover:bg-gray-300"
         >
-          <div class="text-blue-500 hover:underline cursor-pointer">
+            <button 
+            class="text-blue-500 hover:underline cursor-pointer text-left"
+            @click="$router.push(`/response?id=${item.id}&title=${item.title}`)"
+            >
             {{ item.title }}
-          </div>
+            </button>
           <div class="text-right">{{ item.type }}</div>
         </div>
       </div>
@@ -64,39 +67,48 @@ definePageMeta({
 // 題目數據
 const topics = ref([
   {
-    title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    title: "「111111由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 0,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 1,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 2,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 3,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 4,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 5,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 6,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 7,
     type: "選擇題",
   },
   {
     title: "「由國家出資的遺征計畫，經費較高，卻少有重大發現。官方......」",
+    id: 8,
     type: "選擇題",
   },
 ]);
