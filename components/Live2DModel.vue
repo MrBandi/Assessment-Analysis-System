@@ -8,9 +8,11 @@
 import * as PIXI from 'pixi.js';
 import { Live2DModel } from 'pixi-live2d-display';
 import { onMounted, ref } from 'vue';
+import { useLive2DModel } from '~/composables/useLive2DModel'; // 导入composable
 
 window.PIXI = PIXI;
 const containerRef = ref(null);
+const { setModel } = useLive2DModel(); // 获取setModel方法
 
 onMounted(async () => {
     try {
@@ -52,6 +54,29 @@ onMounted(async () => {
         model.anchor.set(0.5, 0.5);
         
         console.log('Live2D model initialized successfully!');
+        
+        // 将模型引用传递给useLive2DModel composable
+        setModel(model);
+        
+        // 打印模型参数，方便调试
+        if (model.internalModel && model.internalModel.coreModel) {
+            try {
+                console.log('Model object:', model);
+                // 尝试输出所有可用参数
+                if (typeof model.internalModel.coreModel.getParameterIds === 'function') {
+                    const params = model.internalModel.coreModel.getParameterIds();
+                    console.log('Available parameters:', params);
+                    
+                    // 找出所有嘴部相关参数
+                    const mouthParams = params.filter(p => p.toLowerCase().includes('mouth'));
+                    if (mouthParams.length > 0) {
+                        console.log('Mouth parameters:', mouthParams);
+                    }
+                }
+            } catch (e) {
+                console.warn('Failed to get model parameters:', e);
+            }
+        }
         
         model.on("hit", () => {
             console.log('Model clicked');

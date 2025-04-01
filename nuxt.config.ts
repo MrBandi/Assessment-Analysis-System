@@ -13,14 +13,19 @@ export default defineNuxtConfig({
   app: {
     head: {
       script: [
-        { src: '/live2d.min.js' },
-        { src: '/live2dcubismcore.min.js' }
+        { src: '/live2dcubismcore.min.js' },
+        { src: '/live2d.min.js' }
       ]
     },
     pageTransition: { 
       name: 'page-fade', 
       mode: 'out-in' 
     },
+  },
+  runtimeConfig: {
+    public: {
+      GOOGLE_TTS_API_KEY: process.env.GOOGLE_TTS_API_KEY
+    }
   },
   ssr: false,
 })
