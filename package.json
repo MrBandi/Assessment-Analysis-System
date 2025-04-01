@@ -12,7 +12,9 @@
   "dependencies": {
     "@nuxt/eslint": "1.2.0",
     "@tailwindcss/vite": "^4.0.17",
+    "dompurify": "^3.2.4",
     "eslint": "^9.0.0",
+    "marked": "^15.0.7",
     "nuxt": "^3.16.1",
     "pixi-live2d-display": "^0.4.0",
     "pixi.js": "6.5.10",
