@@ -102,39 +102,60 @@
       </div>
 
       <!-- 底部問助教區域 -->
-      <div
-        v-if="showFooter"
+      <div 
+        v-if="showFooter" 
         class="absolute bottom-0 left-0 right-0 bg-gray-300 py-3 px-4 rounded-b-lg flex justify-between items-center"
       >
-        <div class="flex-grow flex items-center">
-          <input
+        <div class="flex-grow flex items-center space-x-2">
+          <!-- 語音輸入按鈕 -->
+          <button
+            @click="toggleVoiceInput"
+            class="p-2 rounded-full transition-colors focus:outline-none"
+            :class="isListening ? 'bg-red-500 text-white pulse-animation' : 'bg-gray-400 hover:bg-gray-500 text-white'"
+            title="語音輸入"
+          >
+            <!-- 麥克風圖標 -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          <!-- 輸入框 -->
+          <input 
             v-model="userQuestion"
-            type="text"
-            placeholder="分析不清楚? 快來詢問助教..."
+            type="text" 
+            placeholder="分析不清楚? 快來詢問助教..." 
             class="w-full py-2 px-3 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             @keyup.enter="sendQuestion"
-            :disabled="isMessageSending"
-          />
+          >
         </div>
-        <button
+        
+        <!-- 發送按鈕 -->
+        <button 
           class="bg-gray-800 p-2 rounded-full ml-3 hover:bg-gray-700 transition-colors"
           @click="sendQuestion"
-          :disabled="isMessageSending"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 12h14M12 5l7 7-7 7"
-            />
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-white" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </button>
+      </div>
+      
+      <!-- 語音識別狀態提示 -->
+      <div 
+        v-if="isListening && showFooter" 
+        class="absolute bottom-16 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 px-4 py-2 rounded-full shadow-md flex items-center"
+      >
+        <span class="w-2 h-2 bg-red-600 rounded-full mr-2 animate-pulse"></span>
+        正在聆聽...
+      </div>
+      
+      <!-- 語音識別錯誤提示 -->
+      <div 
+        v-if="speechError && showFooter" 
+        class="absolute bottom-16 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full shadow-md"
+      >
+        {{ speechError }}
       </div>
     </div>
   </div>
@@ -146,6 +167,7 @@ import { useRoute } from "vue-router";
 import { definePageMeta } from "#imports";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
+import { useSpeechToText } from '~/composables/useSpeechToText';
 
 definePageMeta({
   pageTransition: {
@@ -153,6 +175,17 @@ definePageMeta({
     mode: "out-in",
   },
 });
+
+// 語音轉文字功能
+const { 
+  text: speechText, 
+  isListening, 
+  isSupportedAPI, 
+  error: speechError, 
+  startListening, 
+  stopListening 
+} = useSpeechToText();
+
 
 // 使用route來獲取查詢參數
 const route = useRoute();
@@ -171,6 +204,12 @@ const userQuestion = ref("");
 const messages = ref([]);
 const isMessageSending = ref(false);
 
+watch(speechText, (newText) => {
+  if (newText) {
+    userQuestion.value = newText;
+  }
+});
+
 // 監聽消息變化，自動滾動到底部
 watch(
   messages,
@@ -184,6 +223,20 @@ watch(
 watch(typingContent, () => {
   nextTick(scrollToBottom);
 });
+
+// 切換語音輸入
+const toggleVoiceInput = () => {
+  if (!isSupportedAPI.value) {
+    alert('您的瀏覽器不支援語音識別功能');
+    return;
+  }
+  
+  if (isListening.value) {
+    stopListening();
+  } else {
+    startListening('zh-TW');
+  }
+};
 
 // AI回答範本
 const aiResponses = [
