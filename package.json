@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@google-cloud/text-to-speech": "^6.0.1",
     "@nuxt/eslint": "1.2.0",
     "@tailwindcss/vite": "^4.0.17",
     "dompurify": "^3.2.4",

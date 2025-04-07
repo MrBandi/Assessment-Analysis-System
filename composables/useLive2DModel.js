@@ -78,6 +78,7 @@ export function useLive2DModel() {
           // 尝试不同的参数名，因为不同模型可能使用不同命名
           try {
             modelState.model.internalModel.coreModel.setParameterValueById('ParamMouthOpenY', mouthValue);
+          // eslint-disable-next-line no-unused-vars
           } catch (error) {
             // 尝试替代参数名
             modelState.model.internalModel.coreModel.setParameterValueById('PARAM_MOUTH_OPEN_Y', mouthValue);

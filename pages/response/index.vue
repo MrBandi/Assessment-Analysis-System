@@ -239,9 +239,9 @@ const messages = ref([]);
 const isMessageSending = ref(false);
 
 const googleTTSConfig = {
-    apiKey: process.env.GOOGLE_TTS_API_KEY || "", // 可以从环境变量读取
-    language: "zh-TW",
-    voice: "zh-TW-Standard-A", // 也可以使用 'zh-TW-Wavenet-A' 获得更自然的声音
+    apiKey: useRuntimeConfig().public.GOOGLE_TTS_API_KEY || "", // 可以从环境变量读取
+    languageCode: "zh-TW",
+    voiceName: "cmn-TW-Wavenet-A", // 也可以使用 'zh-TW-Wavenet-A' 获得更自然的声音
     gender: "FEMALE",
 };
 
@@ -287,7 +287,7 @@ const toggleVoiceInput = () => {
 
 // AI回答範本
 const aiResponses = [
-    "這道題重點在於比較國家隊與私人隊的差異，國家隊比較注重補給裝備，但效率較低。",
+    "這道題重點在於比較國家隊與私人隊的差異，國隊比較注重補給裝備，但效率較低。",
 ];
 
 // Markdown 格式的解析內容

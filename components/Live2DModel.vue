@@ -9,10 +9,12 @@ import * as PIXI from 'pixi.js';
 import { Live2DModel } from 'pixi-live2d-display';
 import { onMounted, ref } from 'vue';
 import { useLive2DModel } from '~/composables/useLive2DModel'; // 导入composable
+import { useRouter } from 'vue-router';
 
 window.PIXI = PIXI;
 const containerRef = ref(null);
 const { setModel } = useLive2DModel(); // 获取setModel方法
+const router = useRouter();
 
 onMounted(async () => {
     try {
@@ -77,11 +79,11 @@ onMounted(async () => {
                 console.warn('Failed to get model parameters:', e);
             }
         }
-        
         model.on("hit", () => {
             console.log('Model clicked');
             if (model.expression) {
-                model.expression('f05');
+                model.expression('f06');
+                router.push('/chat');
             }
         });
     } catch (error) {
